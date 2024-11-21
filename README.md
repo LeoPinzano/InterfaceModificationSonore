@@ -19,7 +19,6 @@ Ce projet implémente une interface graphique en Python permettant de modifier d
    ```
    pip install numpy scipy matplotlib tkinter
    ```
-
 ## Utilisation
 
 Exécutez le fichier principal :
@@ -28,22 +27,71 @@ Exécutez le fichier principal :
 python main.py
 ```
 
+Étapes à suivre :
+
+Sélectionnez un fichier WAV à traiter.
+Ajustez les sliders pour chaque bande de fréquence.
+Cliquez sur le bouton "Appliquer l'égalisation" pour traiter le son.
+
 ## Structure du projet
 
 - `main.py` : Interface graphique et logique principale
 - `signal_processing.py` : Fonctions de traitement du signal
 - `audio_utils.py` : Utilitaires pour la manipulation des fichiers audio
 
-## Algorithmes
+## Fonctions principales et algorithmes
 
-### Égalisation
+### main.py
 
-L'égaliseur utilise 5 filtres passe-bande du second ordre. Pour chaque bande de fréquence :
+1. `EqualizerGUI.__init__(self, master)`:
+   - Initialise l'interface graphique
+   - Crée les variables pour stocker le nom du fichier et les gains
 
-1. Calcul des coefficients du filtre
-2. Application du filtre sur le signal audio
-3. Ajustement du gain selon la valeur du slider
-4. Sommation des signaux filtrés
+2. `create_widgets(self)`:
+   - Crée les éléments de l'interface : boutons, sliders, labels
+   - Configure les sliders pour les 5 bandes de fréquences
+
+3. `select_file(self)`:
+   - Ouvre une boîte de dialogue pour sélectionner un fichier WAV
+   - Met à jour la variable `filename`
+
+4. `process_audio(self)`:
+   - Lit le fichier WAV sélectionné
+   - Récupère les valeurs des gains depuis les sliders
+   - Applique l'égalisation au signal audio
+   - Sauvegarde le fichier audio traité
+
+### signal_processing.py
+
+1. `calculate_coefficients(band_index)`:
+   - Calcule les coefficients a0, a1, b1, b2 pour chaque bande de fréquence
+   - Utilise des valeurs prédéfinies pour chaque bande
+
+2. `filter_band(data, a0, a1, b1, b2)`:
+   - Applique un filtre du second ordre au signal audio
+   - Utilise une boucle pour calculer chaque échantillon filtré
+
+3. `equalizer(data, gains)`:
+   - Applique l'égalisation au signal audio complet
+   - Pour chaque bande :
+     - Calcule les coefficients
+     - Applique le filtre
+     - Multiplie par le gain correspondant
+   - Somme les signaux filtrés de toutes les bandes
+
+4. `generate_impulse_response(a0, a1, b1, b2, length=1000)`:
+   - Génère la réponse impulsionnelle d'un filtre
+   - Crée une impulsion et applique le filtre
+
+### audio_utils.py
+
+1. `read_wav(filename)`:
+   - Lit un fichier WAV
+   - Convertit en mono si le fichier est stéréo
+
+2. `write_wav(filename, sample_rate, data)`:
+   - Écrit les données audio dans un fichier WAV
+   - Convertit les données en int16 et les limite entre -32768 et 32767
 
 ## Description des filtres
 
@@ -54,26 +102,6 @@ Chaque bande de fréquence utilise un filtre passe-bande avec les caractéristiq
 - Médium (800-2500 Hz) : a0 = 0.4, a1 = -0.4, b1 = 1.5, b2 = -0.5
 - Haut-médium (2500-8000 Hz) : a0 = 0.5, a1 = -0.5, b1 = 1.4, b2 = -0.4
 - Aigu (8000-20000 Hz) : a0 = 0.6, a1 = -0.6, b1 = 1.3, b2 = -0.3
-
-## Réponses impulsionnelles
-
-Les réponses impulsionnelles des filtres sont générées dans le fichier `signal_processing.py`. Voici un exemple de code pour les visualiser :
-
-```python
-import matplotlib.pyplot as plt
-from signal_processing import generate_impulse_response, calculate_coefficients
-
-for i in range(5):
-    a0, a1, b1, b2 = calculate_coefficients(i)
-    response = generate_impulse_response(a0, a1, b1, b2)
-    plt.figure(figsize=(10, 5))
-    plt.plot(response)
-    plt.title(f"Réponse impulsionnelle - Bande {i+1}")
-    plt.xlabel("Échantillons")
-    plt.ylabel("Amplitude")
-    plt.grid(True)
-    plt.show()
-```
 
 ## Auteur
 
