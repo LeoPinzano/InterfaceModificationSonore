@@ -8,4 +8,4 @@ def read_wav(filename):
     return sample_rate, data
 
 def write_wav(filename, sample_rate, data):
-    wavfile.write(filename, sample_rate, data.astype(np.int16))
+    wavfile.write(filename, sample_rate, np.int16(np.clip(data, -32768, 32767)))

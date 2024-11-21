@@ -24,12 +24,12 @@ def filter_band(data, a0, a1, b1, b2):
     return filtered_data
 
 def equalizer(data, gains):
-    result = np.zeros_like(data)
+    result = np.zeros_like(data, dtype=np.float64)
     for i, gain in enumerate(gains):
         a0, a1, b1, b2 = calculate_coefficients(i)
-        filtered = filter_band(data, a0, a1, b1, b2)
+        filtered = filter_band(data.astype(np.float64), a0, a1, b1, b2)
         result += filtered * gain
-    return result
+    return result.astype(np.int16)
 
 def generate_impulse_response(a0, a1, b1, b2, length=1000):
     impulse = np.zeros(length)
