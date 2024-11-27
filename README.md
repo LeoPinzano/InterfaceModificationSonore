@@ -54,12 +54,14 @@ Cliquez sur le bouton "Appliquer l'égalisation" pour traiter le son.
 3. `select_file(self)`:
    - Ouvre une boîte de dialogue pour sélectionner un fichier WAV
    - Met à jour la variable `filename`
+   - Gère les erreurs si aucun fichier n'est séléctionné
 
 4. `process_audio(self)`:
    - Lit le fichier WAV sélectionné
    - Récupère les valeurs des gains depuis les sliders
    - Applique l'égalisation au signal audio
    - Sauvegarde le fichier audio traité
+   - Affiche des messages d'erreurs si nécessaire
 
 ### signal_processing.py
 
@@ -92,6 +94,33 @@ Cliquez sur le bouton "Appliquer l'égalisation" pour traiter le son.
 2. `write_wav(filename, sample_rate, data)`:
    - Écrit les données audio dans un fichier WAV
    - Convertit les données en int16 et les limite entre -32768 et 32767
+
+## Gestion des erreurs
+
+Le projet intègre plusieurs mécanismes de gestion des erreurs pour améliorer la robustesse et l'expérience utilisateur :
+
+1. **Sélection de fichier** :
+   - Vérifie si un fichier a été sélectionné avant le traitement
+   - Affiche un message d'erreur si aucun fichier n'est choisi
+
+2. **Lecture de fichier WAV** :
+   - Utilise un bloc try-except pour gérer les erreurs de lecture de fichier
+   - Affiche un message d'erreur spécifique en cas de problème de lecture
+
+3. **Traitement du signal** :
+   - Vérifie la validité des données audio avant le traitement
+   - Gère les cas où les données audio sont vides ou invalides
+
+4. **Sauvegarde du fichier** :
+   - Vérifie si un nom de fichier de sortie a été fourni
+   - Gère les erreurs d'écriture de fichier
+   - Affiche un message de confirmation ou d'erreur après la sauvegarde
+
+5. **Interface utilisateur** :
+   - Désactive les contrôles inappropriés lorsqu'aucun fichier n'est chargé
+   - Fournit des retours visuels pour les actions de l'utilisateur
+
+Ces mécanismes de gestion d'erreurs assurent une meilleure stabilité de l'application et fournissent des informations utiles à l'utilisateur en cas de problème.
 
 ## Description des filtres
 
