@@ -1,10 +1,20 @@
+## @file main.py
+# @brief Interface graphique pour l'égaliseur audio
+# @details Ce fichier contient la classe EqualizerGUI qui gère l'interface utilisateur
+# pour l'égaliseur audio, permettant la sélection de fichiers, l'ajustement des gains
+# et le traitement audio.
+
 import tkinter as tk
 from tkinter import ttk, filedialog
 import numpy as np
 from signal_processing import equalizer, generate_impulse_response
 from audio_utils import read_wav, write_wav
 
+## @class EqualizerGUI
+# @brief Classe principale pour l'interface graphique de l'égaliseur
 class EqualizerGUI:
+    ## @brief Constructeur de la classe EqualizerGUI
+    # @param master Fenêtre principale Tkinter
     def __init__(self, master):
         self.master = master
         master.title("Égaliseur Audio")
@@ -15,6 +25,7 @@ class EqualizerGUI:
 
         self.create_widgets()
 
+    ## @brief Crée et place les widgets de l'interface graphique
     def create_widgets(self):
         # Bouton de sélection de fichier
         ttk.Button(self.master, text="Sélectionner un fichier WAV", command=self.select_file).pack(pady=10)
@@ -29,11 +40,13 @@ class EqualizerGUI:
         # Bouton de traitement
         ttk.Button(self.master, text="Appliquer l'égalisation", command=self.process_audio).pack(pady=20)
 
+    ## @brief Ouvre une boîte de dialogue pour sélectionner un fichier WAV
     def select_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("WAV files", "*.wav")])
         if file_path:
             self.filename.set(file_path)
 
+    ## @brief Traite le fichier audio sélectionné avec les gains spécifiés
     def process_audio(self):
         if not self.filename.get():
             print("Veuillez sélectionner un fichier WAV")
@@ -49,6 +62,7 @@ class EqualizerGUI:
             write_wav(output_file, sample_rate, equalized_data)
             print(f"Fichier égalisé sauvegardé : {output_file}")
 
+## @brief Point d'entrée principal du programme
 if __name__ == "__main__":
     root = tk.Tk()
     app = EqualizerGUI(root)
