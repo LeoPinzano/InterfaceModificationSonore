@@ -12,7 +12,7 @@ Ce projet implémente une interface graphique en Python permettant de modifier d
 
 1. Clonez ce dépôt :
    ```
-   git clone https://github.com/votre-nom-utilisateur/interface-modifications-sonores.git
+   git clone https://github.com/LeoPinzano/InterfaceModificationSonore
    ```
 
 2. Installez les dépendances :
